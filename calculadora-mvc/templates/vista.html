@@ -1,0 +1,76 @@
+<!-- vista.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora MVC Web</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .calculadora { max-width: 300px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        input { width: 100%; font-size: 24px; padding: 10px; text-align: right; margin-bottom: 10px; }
+        button { width: 22%; font-size: 20px; padding: 10px; margin: 5px; cursor: pointer; }
+        button:active { background-color: #ddd; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora">
+        <input type="text" id="display" readonly>
+        <div>
+            <button onclick="presionar('7')">7</button>
+            <button onclick="presionar('8')">8</button>
+            <button onclick="presionar('9')">9</button>
+            <button onclick="presionar('/')">/</button>
+        </div>
+        <div>
+            <button onclick="presionar('4')">4</button>
+            <button onclick="presionar('5')">5</button>
+            <button onclick="presionar('6')">6</button>
+            <button onclick="presionar('*')">*</button>
+        </div>
+        <div>
+            <button onclick="presionar('1')">1</button>
+            <button onclick="presionar('2')">2</button>
+            <button onclick="presionar('3')">3</button>
+            <button onclick="presionar('-')">-</button>
+        </div>
+        <div>
+            <button onclick="presionar('0')">0</button>
+            <button onclick="limpiar()">C</button>
+            <button onclick="calcular()">=</button>
+            <button onclick="presionar('+')">+</button>
+        </div>
+        <div id="error" class="error"></div>
+    </div>
+
+    <script>
+        let expresion = '';
+
+        function presionar(valor) {
+            expresion += valor;
+            document.getElementById('display').value = expresion;
+        }
+
+        function limpiar() {
+            expresion = '';
+            document.getElementById('display').value = '';
+            document.getElementById('error').innerText = '';
+        }
+
+        async function calcular() {
+            const respuesta = await fetch(`/calcular?operacion=${expresion}`);
+            const datos = await respuesta.json();
+
+            if (respuesta.ok) {
+                document.getElementById('display').value = datos.resultado;
+                expresion = datos.resultado.toString();
+            } else {
+                document.getElementById('error').innerText = datos.error;
+            }
+        }
+    </script>
+
+</body>
+</html>
