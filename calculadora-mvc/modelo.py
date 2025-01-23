@@ -1,4 +1,4 @@
-# Modelo
+# modelo.py
 class ModeloCalculadora:
     def sumar(self, a, b):
         return a + b
@@ -14,5 +14,3 @@ class ModeloCalculadora:
             return a / b
         else:
             return "Error: División por cero"
-
-
